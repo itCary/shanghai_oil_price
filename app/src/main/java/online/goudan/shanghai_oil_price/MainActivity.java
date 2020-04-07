@@ -81,24 +81,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1:
-                boolean success = false;
-                if (grantResults.length > 0) {
-                    for (int i : grantResults) {
-                        if (i == PackageManager.PERMISSION_GRANTED) {
-                            success = true;
-                        } else {
-                            success = false;
-                            break;
-                        }
-
-                    }
-                }
-                break;
-
-
-        }
+        requestPermission();
     }
 
     @OnClick(R.id.btn_request_http)
@@ -112,6 +95,11 @@ public class MainActivity extends BaseActivity {
         Observable.create(emitter -> {
             List<Province> provinceList = DataSupport.findAll(Province.class);
             List<City> cityList = DataSupport.findAll(City.class);
+            if (provinceList.size() == 0 || cityList.size() == 0) {
+                new InitUils().initProvince();
+                provinceList = DataSupport.findAll(Province.class);
+                cityList = DataSupport.findAll(City.class);
+            }
             emitter.onNext(String.valueOf(provinceList) + String.valueOf(cityList));
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidScheduler.mainThread())
