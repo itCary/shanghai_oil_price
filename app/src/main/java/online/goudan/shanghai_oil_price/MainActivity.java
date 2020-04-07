@@ -1,8 +1,10 @@
 package online.goudan.shanghai_oil_price;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -10,6 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +32,17 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import online.goudan.shanghai_oil_price.bean.City;
+import online.goudan.shanghai_oil_price.bean.Province;
 import online.goudan.shanghai_oil_price.utils.AndroidScheduler;
+import online.goudan.shanghai_oil_price.utils.Common;
 import online.goudan.shanghai_oil_price.utils.HttpUtils;
+import online.goudan.shanghai_oil_price.utils.InitUils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     List<String> mPermissionList = new ArrayList<>();
     @BindView(R.id.btn_request_http)
     Button btnRequestHttp;
@@ -35,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvShowData;
 
     HttpUtils httpUtils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                             success = false;
                             break;
                         }
+
                     }
                 }
                 break;
@@ -86,19 +103,26 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_request_http)
     public void onViewClicked() {
-        Observable.create(emitter -> {
-            String fpriceHtml = httpUtils.doGet("http://www.xiaoxiongyouhao.com/fprice/");
-            emitter.onNext(fpriceHtml);
+        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+        dialog.setTitle("请求数据");
+        dialog.setMessage("正在联网。。。");
+        dialog.setCancelable(true);
+        dialog.show();
 
+        Observable.create(emitter -> {
+            List<Province> provinceList = DataSupport.findAll(Province.class);
+            List<City> cityList = DataSupport.findAll(City.class);
+            emitter.onNext(String.valueOf(provinceList) + String.valueOf(cityList));
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidScheduler.mainThread())
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
                     }
+
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        dialog.hide();
                         tvShowData.setText(String.valueOf(o));
                     }
 

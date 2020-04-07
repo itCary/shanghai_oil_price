@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="oilPrice"></dbname>
+    <version value="1"></version>
+    <list>
+        <mapping class="online.goudan.shanghai_oil_price.bean.Province"></mapping>
+        <mapping class="online.goudan.shanghai_oil_price.bean.City"></mapping>
+    </list>
+</litepal>

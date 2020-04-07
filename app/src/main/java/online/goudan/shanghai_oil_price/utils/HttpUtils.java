@@ -1,53 +1,40 @@
 package online.goudan.shanghai_oil_price.utils;
 
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import android.app.DownloadManager;
+import android.util.Log;
 
 import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * @author 刘成龙
  * @date 2020/4/7
  */
 public class HttpUtils {
-    private RequestConfig getConfig() {
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(1000)
-                .setConnectionRequestTimeout(500)
-                .setSocketTimeout(10000)
-                .build();
 
-        return requestConfig;
-    }
+    private String TAG = "HttpUtils";
+    private OkHttpClient client = new OkHttpClient();
 
-    /**
-     * 使用get 请求获取页面
-     *
-     * @param url
-     * @return
-     */
     public String doGet(String url) {
-
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = null;
         try {
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (response != null) {
-                try {
-                    response.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            response = client.newCall(request).execute();
+            Log.i(TAG, "doGet: " + response.code());
+            if (response.code() == 200) {
+                return response.body().string();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return "";
+
+
     }
+
 }

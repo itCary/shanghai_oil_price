@@ -34,4 +34,13 @@ public class City extends DataSupport {
     public void setProvincedId(int provincedId) {
         this.provincedId = provincedId;
     }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", cityName='" + cityName + '\'' +
+                ", provincedId=" + provincedId +
+                '}';
+    }
 }
