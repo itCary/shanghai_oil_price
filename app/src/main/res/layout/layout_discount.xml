@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="#8000"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_city_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="XXX市优惠排名"
+        android:textColor="#fff"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/style_tv_discount"
+            android:layout_weight="1"
+            android:text="排名" />
+
+        <TextView
+            style="@style/style_tv_discount"
+            android:layout_weight="2"
+            android:text="区县" />
+
+        <TextView
+            style="@style/style_tv_discount"
+            android:layout_weight="5"
+            android:text="加油站" />
+
+        <TextView
+            style="@style/style_tv_discount"
+            android:layout_weight="1"
+            android:text="人次" />
+
+        <TextView
+            style="@style/style_tv_discount"
+            android:layout_weight="1"
+            android:text="油价" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_city_station_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn_previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="上一页" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="下一页" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

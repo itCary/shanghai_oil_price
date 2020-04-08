@@ -45,7 +45,9 @@
                         android:orientation="vertical">
 
 
-                        <include layout="@layout/oil_price" />
+                        <include layout="@layout/layout_show_oil_price" />
+
+                        <include layout="@layout/layout_discount" />
                     </LinearLayout>
 
                 </ScrollView>

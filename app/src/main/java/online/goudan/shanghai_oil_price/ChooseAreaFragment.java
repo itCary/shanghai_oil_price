@@ -2,7 +2,6 @@ package online.goudan.shanghai_oil_price;
 
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,7 +78,7 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.choose_area, container, false);
+        View view = inflater.inflate(R.layout.fragment_choose_area, container, false);
         unbinder = ButterKnife.bind(this, view);
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dataList);
         Log.i(TAG, "onCreateView: " + adapter.toString());
@@ -141,9 +140,11 @@ public class ChooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel = LEVEL_PROVINCE;
         } else {
+            showProgressDialog();
             new Thread(() -> {
                 new InitUils().initProvince();
                 getActivity().runOnUiThread(() -> {
+                    closeProgressDialog();
                     queryProvinces();
                 });
             }).start();
@@ -171,9 +172,11 @@ public class ChooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel = LEVEL_CITY;
         } else {
+            showProgressDialog();
             new Thread(() -> {
                 new InitUils().initProvince();
                 getActivity().runOnUiThread(() -> {
+                    closeProgressDialog();
                     queryCities();
                 });
             }).start();

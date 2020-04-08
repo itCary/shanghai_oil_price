@@ -11,6 +11,16 @@ public class City extends DataSupport {
     private String cityName;
     private int provincedId;
     private String href;
+    private String disHref;
+
+    public String getDisHref() {
+        return disHref;
+    }
+
+    public void setDisHref(String disHref) {
+        this.disHref = disHref;
+    }
+
     public int getId() {
         return id;
     }
@@ -50,6 +60,7 @@ public class City extends DataSupport {
                 ", cityName='" + cityName + '\'' +
                 ", provincedId=" + provincedId +
                 ", href='" + href + '\'' +
+                ", disHref='" + disHref + '\'' +
                 '}';
     }
 }
