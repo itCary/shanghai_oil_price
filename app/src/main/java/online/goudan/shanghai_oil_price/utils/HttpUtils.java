@@ -20,6 +20,7 @@ public class HttpUtils {
     private OkHttpClient client = new OkHttpClient();
 
     public String doGet(String url) {
+        Log.i(TAG, "doGet: url" +url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
         String responseStr = null;

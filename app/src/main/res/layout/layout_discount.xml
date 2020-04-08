@@ -72,6 +72,14 @@
                 android:layout_centerInParent="true"
                 android:text="上一页" />
         </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_show_index_and_total"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
         <RelativeLayout
             android:layout_width="0dp"

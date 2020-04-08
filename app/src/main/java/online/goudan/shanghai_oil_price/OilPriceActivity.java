@@ -77,6 +77,8 @@ public class OilPriceActivity extends BaseActivity {
     Button btnNext;
     @BindView(R.id.ll_city_station_list)
     LinearLayout llCityStationList;
+    @BindView(R.id.tv_show_index_and_total)
+    TextView tvShowIndexAndTotal;
 
     private String oilCity;
 
@@ -200,6 +202,7 @@ public class OilPriceActivity extends BaseActivity {
         String split = text.split("，")[1];
         String totalStr = split.substring(1, split.length() - 1);
         total = Integer.parseInt(totalStr);
+        tvShowIndexAndTotal.setText("" + index + "/" + total);
         llCityStationList.removeAllViews();
         for (int i = 1; i < trs.size(); i++) {
             Elements tds = trs.get(i).select("td");
