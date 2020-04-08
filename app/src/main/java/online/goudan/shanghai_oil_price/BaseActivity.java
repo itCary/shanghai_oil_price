@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import online.goudan.shanghai_oil_price.utils.ActivityCollector;
-import online.goudan.shanghai_oil_price.utils.StatusBarUtil;
 
 
 public class BaseActivity extends AppCompatActivity {

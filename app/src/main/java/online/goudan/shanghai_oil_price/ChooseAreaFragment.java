@@ -69,10 +69,6 @@ public class ChooseAreaFragment extends Fragment {
      */
     private Province selectedProvince;
 
-    /**
-     * 选中的城市
-     */
-    private City selectedCity;
 
     /**
      * 当前选中的级别
@@ -106,7 +102,6 @@ public class ChooseAreaFragment extends Fragment {
                     activity.drawerLayout.closeDrawers();
                     activity.swipeRefresh.setRefreshing(true);
                     activity.loadOilPrice(cityName);
-                    activity.loadBackgroudnPic();
                 }
             }
         });
@@ -123,6 +118,11 @@ public class ChooseAreaFragment extends Fragment {
         queryProvinces();
     }
 
+    public void setCurrentLevel(Province province) {
+        this.selectedProvince = province;
+        queryCities();
+
+    }
 
     /**
      * 查询全国所有的省，优先从数据库查询，如果没有查询到再去服务器上查询。
@@ -171,8 +171,12 @@ public class ChooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel = LEVEL_CITY;
         } else {
-            new InitUils().initProvince();
-            queryCities();
+            new Thread(() -> {
+                new InitUils().initProvince();
+                getActivity().runOnUiThread(() -> {
+                    queryCities();
+                });
+            }).start();
         }
     }
 

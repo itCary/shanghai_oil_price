@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,16 +12,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -44,14 +44,13 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import online.goudan.shanghai_oil_price.bean.City;
 import online.goudan.shanghai_oil_price.bean.ImageBean;
-import online.goudan.shanghai_oil_price.bean.WomanPic;
+import online.goudan.shanghai_oil_price.bean.Province;
 import online.goudan.shanghai_oil_price.utils.AndroidScheduler;
 import online.goudan.shanghai_oil_price.utils.HttpUtils;
 import online.goudan.shanghai_oil_price.utils.InitUils;
 
 public class OilPriceActivity extends BaseActivity {
     List<String> mPermissionList = new ArrayList<>();
-    Button btnRequestHttp;
     HttpUtils httpUtils;
     @BindView(R.id.iv_background)
     ImageView ivBackground;
@@ -86,6 +85,17 @@ public class OilPriceActivity extends BaseActivity {
         String oilStr = preferences.getString("oil_price", null);
         if (oilStr != null) {
             parseDataAndShow(oilStr);
+            Observable.create(emitter -> {
+                City city = DataSupport.where("cityName=?", oilCity).findFirst(City.class);
+                Province province = DataSupport.where("id=?", String.valueOf(city.getProvincedId())).findFirst(Province.class);
+                emitter.onNext(province);
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidScheduler.mainThread())
+                    .subscribe(o -> {
+                        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                        ChooseAreaFragment fragment = (ChooseAreaFragment) fragments.get(0);
+                        fragment.setCurrentLevel((Province) o);
+                    });
         } else {
             drawerLayout.openDrawer(GravityCompat.START);
         }
@@ -93,7 +103,12 @@ public class OilPriceActivity extends BaseActivity {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadOilPrice(oilCity);
+                if (oilCity != null) {
+                    loadOilPrice(oilCity);
+                } else {
+                    Toast.makeText(mContext, "还没有选择城市", Toast.LENGTH_SHORT).show();
+                    swipeRefresh.setRefreshing(false);
+                }
             }
         });
     }
@@ -128,8 +143,9 @@ public class OilPriceActivity extends BaseActivity {
         String cityName = document.select("h3.text-center").get(0).text();
         oilCity = cityName.substring(0, cityName.length() - 2);
         titleCity.setText(oilCity);
+        String timeString = document.select("h5.text-center").get(1).text();
 
-        titleUpdateTime.setText(document.select("h5.text-center").get(1).text());
+        titleUpdateTime.setText(timeString.substring(5));
         llOilPrice.removeAllViews();
         for (int i = 1; i < oilS.size(); i++) {
             Element element = oilS.get(i);
@@ -168,7 +184,7 @@ public class OilPriceActivity extends BaseActivity {
                 } else {
                     emitter.onNext("http://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=http://p5.qhimg.com/bdm/2560_1600_100/t01a7117bbc9683a7eb.jpg");
                 }
-            }catch (JsonSyntaxException e){
+            } catch (JsonSyntaxException e) {
                 emitter.onNext("http://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=http://p5.qhimg.com/bdm/2560_1600_100/t01a7117bbc9683a7eb.jpg");
             }
         }).subscribeOn(Schedulers.io())
