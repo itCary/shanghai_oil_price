@@ -10,7 +10,7 @@ public class City extends DataSupport {
     private int id;
     private String cityName;
     private int provincedId;
-
+    private String href;
     public int getId() {
         return id;
     }
@@ -33,5 +33,23 @@ public class City extends DataSupport {
 
     public void setProvincedId(int provincedId) {
         this.provincedId = provincedId;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", cityName='" + cityName + '\'' +
+                ", provincedId=" + provincedId +
+                ", href='" + href + '\'' +
+                '}';
     }
 }

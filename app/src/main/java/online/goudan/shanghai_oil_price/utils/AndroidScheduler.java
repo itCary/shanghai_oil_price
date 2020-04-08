@@ -5,9 +5,10 @@ import android.os.Looper;
 
 import java.util.concurrent.Executor;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.Scheduler;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * @author 刘成龙
@@ -30,6 +31,7 @@ public class AndroidScheduler implements Executor {
         return instance.mMainScheduler;
     }
 
+    @Override
     public void execute(@NonNull Runnable command) {
         mHandler.post(command);
     }
